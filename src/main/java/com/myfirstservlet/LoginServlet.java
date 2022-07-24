@@ -14,20 +14,21 @@ import java.io.PrintWriter;
         description = "Login Servlet Testing",
         urlPatterns = {"/LoginServlet"},
         initParams = {
-                @WebInitParam(name = "user", value = "Navneet"),
                 @WebInitParam(name = "password", value = "Bridgelabz")
         }
 )
 
 public class LoginServlet extends HttpServlet {
+
+    static final String REGEX_NAME = "^[A-Z]{1}[a-zA-Z]{2,}$";
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String userIdInput = req.getParameter("userInput");
         String passwordInput = req.getParameter("pwdInput");
-        String userID = getServletConfig().getInitParameter("user");
         String password = getServletConfig().getInitParameter("password");
 
-        if (userID.equals(userIdInput) && password.equals(passwordInput)) {
+        if (userIdInput.matches(REGEX_NAME) && password.equals(passwordInput)) {
             req.setAttribute("user", userIdInput);
             req.getRequestDispatcher("LoginSuccess.jsp").forward(req, resp);
         } else {
