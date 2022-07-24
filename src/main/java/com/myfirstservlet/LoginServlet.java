@@ -2,7 +2,6 @@ package com.myfirstservlet;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,23 +11,20 @@ import java.io.PrintWriter;
 
 @WebServlet(
         description = "Login Servlet Testing",
-        urlPatterns = {"/LoginServlet"},
-        initParams = {
-                @WebInitParam(name = "password", value = "Bridgelabz")
-        }
+        urlPatterns = {"/LoginServlet"}
 )
 
 public class LoginServlet extends HttpServlet {
 
-    static final String REGEX_NAME = "^[A-Z]{1}[a-zA-Z]{2,}$";
+    private static final String REGEX_NAME = "^[A-Z]{1}[a-zA-Z]{2,}$";
+    private static final String REGEX_PASSWORD = "(?=.*[A-Z])(?=.*[0-9])(?=.{8,})([\\w]*[\\W][\\w]*)";
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String userIdInput = req.getParameter("userInput");
         String passwordInput = req.getParameter("pwdInput");
-        String password = getServletConfig().getInitParameter("password");
 
-        if (userIdInput.matches(REGEX_NAME) && password.equals(passwordInput)) {
+        if (userIdInput.matches(REGEX_NAME) && passwordInput.matches(REGEX_PASSWORD)) {
             req.setAttribute("user", userIdInput);
             req.getRequestDispatcher("LoginSuccess.jsp").forward(req, resp);
         } else {
